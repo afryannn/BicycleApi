@@ -8,14 +8,41 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use App\ModelUser;
 use App\ModelSepeda;
+use App\ModelBooking as booking;
 use Validator;
 use Response;
-
 use Auth;
 use DB;
 
 class ApiController extends Controller
 { 
+  public function bookingitem(Request $req){
+    $i_user = $req->I_USER;
+    $i_item = $req->I_ITEM;
+    $getdate = date("Y-m-d");
+    $booking = booking::insert([
+      'user_id' => $i_user,
+      'bicycle_id' => $i_item,
+      'date_booking' => $getdate,
+      'status' => "ACTIVATED" //END
+    ]);
+    if(!isset($booking)){
+      $arr = array("status" => 201, "message" => "Failed");
+      return response()->json($arr);
+    }
+    $arr = array("status" => 200,"message" => "SUCCES");
+    return response()->json($arr,201);
+  }
+
+  public function getcustomer(){
+    $data = ModelUser::get();
+    if(!isset($data)){
+      $arr = array("status" => 201, "message" => "FAILED","data" =>$data);
+      return response()->json($arr);
+    }
+    $arr = array("status" => 200, "message" => "SUCCES","data" =>$data);
+    return response()->json($arr);
+  }
   public function postRegister(Request $request){
     $email = $request->email;
     $password = $request->password;
@@ -48,7 +75,7 @@ class ApiController extends Controller
       $arr = array("status" => 201, "message" => "Failed");
       return response()->json($arr);
     }
-    $arr = array("status" => 200,"message" => "Succes");
+    $arr = array("status" => 200,"message" => "SUCCES");
     return response()->json($arr,201);
   }
   public function postLogin(Request $request){
@@ -63,10 +90,12 @@ class ApiController extends Controller
     if($valPass == $password){
        if($akun->role_user =='1'){
           $getdata = DB::table('TBUser')->where('id', $akun->id)->first();
-          $arr = array("status" => 200,"role" => "1","message" => "Succes Login", "data" => $getdata);
+          $arr = array("status" => 200,"role" => "1","message" => "SUCCES", "data" => $getdata);
           return response()->json($arr);
        }elseif($akun->role_user =='2'){
-        return redirect()->route('p');
+        $getdata = DB::table('TBUser')->where('id', $akun->id)->first();
+          $arr = array("status" => 200,"role" => "2","message" => "SUCCES", "data" => $getdata);
+          return response()->json($arr);
        }
     }else{  
       $arr = array("status" => 201, "message" => "password incorect");
@@ -103,10 +132,12 @@ class ApiController extends Controller
     $path = storage_path().'/img/'.$fileName;
     return Response::download($path);        
   }
+  
   public function destroyitem($id){
      $fd = ModelSepeda::Where('id',$id)->first();
-     $path = storage_path().'/img/'.$fd->kodesepeda;
-     File::delete($path); 
-     $a = DB::table('TBSepeda') -> where('id', $id)->delete();
+     Storage::delete('upload/'.$fd->name);
+    //  $path = storage_path().'/img/'.$fd->kodesepeda;
+    //  File::delete($path); 
+    //  $a = DB::table('TBSepeda') -> where('id', $id)->delete();
   }
 }
