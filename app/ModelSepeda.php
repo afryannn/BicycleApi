@@ -12,6 +12,7 @@ class ModelSepeda extends Model
         'merk',
         'warna',
         'gambar',
-        'hargasewa'
+        'hargasewa',
+        'url_image'
     ];
 }

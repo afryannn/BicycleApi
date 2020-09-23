@@ -14,5 +14,6 @@
 Route::get('/', function () {
     return view('welcome');
 });
+// Route::get('/upload', 'UploadController@upload');
+// Route::post('/upload/proses', 'UploadController@proses_upload');
 
-Route::get('/storage/img/{filename}','ApiController@image');
