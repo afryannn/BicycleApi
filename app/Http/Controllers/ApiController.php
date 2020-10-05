@@ -218,6 +218,7 @@ class ApiController extends Controller
     } 
   }
   public function getitem(){
+    //final
     $data = ModelSepeda::get();
     $arr = array("status" => 200,"role"=> "2","message" => "Succes", "data" => $data);
     return response()->json($arr);
