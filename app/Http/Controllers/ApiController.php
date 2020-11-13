@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use App\ModelUser;
+use App\dummy;
 use App\ModelSepeda;
 use App\ModelBooking as booking;
 use Validator;
@@ -15,6 +16,31 @@ use DB;
 
 class ApiController extends Controller
 { 
+  public function viewbooking(){
+    $result = booking::all();
+    return view('booking',["data" => $result]);
+  }
+  public function userbooking2(Request $req){
+    $u_id = $req->u_id;
+    $i_id = $req->i_id;
+    $getemail = DB::table('TBUser')->where('id', $u_id)->first();
+    $getmerk = DB::table('TBSepeda')->where('id', $i_id)->first();
+    $email = $getemail->email;
+    $merk = $getmerk->merk;
+    $gambar = $getmerk->gambar;
+    $booking =booking::insert([
+      'u_id' => $u_id,
+      'i_id' => $i_id,
+      'email' => $email,
+      'merk' => $merk,
+      'gambar' => $gambar,
+      'tanggaltransaksi' => date("j, n, Y"),
+      'status' => 1
+    ]);
+    $arr = array("status" => 200,"message" => "SUCCES", "data" => "SUCCES");
+    return response()->json($arr);
+ }
+ 
   public function customerupdate(Request $request){
     $id = $request->id;
     $email = $request->email;
@@ -63,18 +89,15 @@ class ApiController extends Controller
       $name = time().'.'.$image->getClientOriginalExtension();
       $destinationPath = storage_path('/images');
       $image->move($destinationPath, $name);
-    
     }else{
       $arr = array("status" => 201, "message" => "failed");
       return response()->json($arr);
     }
-    $url = "http://192.168.6.233:8000/api/image/".$name;
     $newUser = ModelSepeda::insert([
       'kodesepeda' => $getkodesepeda,
       'merk' => $getmerk,
       'warna' => $getwarna,
       'gambar' => $name,
-      'url_image' => $url,
       'hargasewa' => $gethargasewa
     ]);
 
@@ -221,6 +244,23 @@ class ApiController extends Controller
     //final
     $data = ModelSepeda::get();
     $arr = array("status" => 200,"role"=> "2","message" => "Succes", "data" => $data);
+    return response()->json($arr);
+  }
+  public function dummyimage(Request $request){
+    if ($request->hasFile('image')) {
+      $image = $request->file('image');
+      $name = time().'.'.$image->getClientOriginalExtension();
+      $destinationPath = storage_path('/images');
+      $image->move($destinationPath, $name);
+    }else{
+      $arr = array("status" => 201, "message" => "failed");
+      return response()->json($arr);
+    }
+    $dummy = Dummy::insert([
+      'image' => $name,
+    ]);
+
+    $arr = array("status" => 200,"message" => "SUCCES", "data" => $dummy);
     return response()->json($arr);
   }
   

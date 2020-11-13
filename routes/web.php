@@ -14,6 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/booking','ApiController@viewbooking');
 // Route::get('/upload', 'UploadController@upload');
 // Route::post('/upload/proses', 'UploadController@proses_upload');
 

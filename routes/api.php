@@ -17,4 +17,6 @@ Route::post('/postsepeda','ApiController@postsepeda');
 Route::post('/deleteitem','ApiController@deleteitem');
 Route::get('/image/{filename}','ApiController@getimage');
 Route::post('/customerupdate','ApiController@customerupdate');
+Route::post('/user-booking','ApiController@userbooking2');
+Route::post('/image','ApiController@dummyimage');
 
