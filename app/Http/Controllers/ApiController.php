@@ -23,6 +23,7 @@ class ApiController extends Controller
   public function userbooking2(Request $req){
     $u_id = $req->u_id;
     $i_id = $req->i_id;
+    $price = $req->price;
     $getemail = DB::table('TBUser')->where('id', $u_id)->first();
     $getmerk = DB::table('TBSepeda')->where('id', $i_id)->first();
     $email = $getemail->email;
@@ -35,6 +36,7 @@ class ApiController extends Controller
       'merk' => $merk,
       'gambar' => $gambar,
       'tanggaltransaksi' => date("j, n, Y"),
+      'user_price'=>$price,
       'status' => 1
     ]);
     $arr = array("status" => 200,"message" => "SUCCES", "data" => "SUCCES");

@@ -14,6 +14,7 @@ class ModelBooking extends Model
         'merk',
         'gambar',
         'tanggaltransaksi',
+        'user_price',
         'status'
     ];
 }
