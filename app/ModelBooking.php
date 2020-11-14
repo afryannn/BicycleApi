@@ -14,6 +14,7 @@ class ModelBooking extends Model
         'merk',
         'gambar',
         'tanggaltransaksi',
+        'bank_company',
         'user_price',
         'status'
     ];

@@ -24,6 +24,7 @@ class ApiController extends Controller
     $u_id = $req->u_id;
     $i_id = $req->i_id;
     $price = $req->price;
+    $bank = $req->bank;
     $getemail = DB::table('TBUser')->where('id', $u_id)->first();
     $getmerk = DB::table('TBSepeda')->where('id', $i_id)->first();
     $email = $getemail->email;
@@ -36,6 +37,7 @@ class ApiController extends Controller
       'merk' => $merk,
       'gambar' => $gambar,
       'tanggaltransaksi' => date("j, n, Y"),
+      'bank_company' => $bank,
       'user_price'=>$price,
       'status' => 1
     ]);
