@@ -16,9 +16,38 @@ use DB;
 
 class ApiController extends Controller
 { 
+  public function adminDelete($id){
+    $data = booking::where('id',$id)->first();
+    $data->delete();
+    return redirect("booking");
+  }
+  public function adminOpsi(Request $r){
+    DB::table('TBTransaksi')->where('id',$r->id)->update([
+      'u_id' => $r->u_id,
+      'i_id' => $r->i_id,
+      'email' => $r->email,
+      'merk' => $r->merk,
+      'gambar' => $r->gambar,
+      'tanggaltransaksi' => $r->tanggal,
+      'bank_company' => $r->bank,
+      'user_price' => $r->user,
+      'status' => $r->status,
+      'opsistatus'=> "hapus"
+    ]);
+    return redirect("booking");
+  }
   public function viewbooking(){
     $result = booking::all();
-    return view('booking',["data" => $result]);
+    $cnt = $result->count();
+    return view('booking',["data" => $result,"count"=>$cnt]);
+  }
+  public function viewbooking2(Request $req){
+    $email = $req->email;  
+    $getData = DB::table('TBTransaksi')->where('email', $email)->first();
+    if(!isset($getData)){
+      return view("bookingnotfound");
+    }
+    return view("bookingUser",["datas"=>$getData]);
   }
   public function userbooking2(Request $req){
     $u_id = $req->u_id;
@@ -31,20 +60,20 @@ class ApiController extends Controller
     $merk = $getmerk->merk;
     $gambar = $getmerk->gambar;
     $booking =booking::insert([
-      'u_id' => $u_id,
+      'u_id' => "$u_id",
       'i_id' => $i_id,
-      'email' => $email,
+      'email' => "$email",
       'merk' => $merk,
       'gambar' => $gambar,
       'tanggaltransaksi' => date("j, n, Y"),
       'bank_company' => $bank,
-      'user_price'=>$price,
-      'status' => 1
+      'user_price'=>"$price",
+      'status' => 1,
+      'opsistatus' => "stop"
     ]);
     $arr = array("status" => 200,"message" => "SUCCES", "data" => "SUCCES");
     return response()->json($arr);
  }
- 
   public function customerupdate(Request $request){
     $id = $request->id;
     $email = $request->email;

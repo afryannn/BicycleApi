@@ -16,6 +16,7 @@ class ModelBooking extends Model
         'tanggaltransaksi',
         'bank_company',
         'user_price',
-        'status'
+        'status',
+        'opsistatus'
     ];
 }
