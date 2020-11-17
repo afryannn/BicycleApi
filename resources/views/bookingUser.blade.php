@@ -8,25 +8,54 @@
     <title>Document</title>
 </head>
 <body>
-
+<center>
+</br>
 <div class="container">
   <div class="card" style="width: 20rem;">
+  <div class="card-header b">
+    Transaksi Kamu
+  </div>
   <div class="card-body">
-     <h4>Merk    => {{$datas->merk}}</h4>
-     <h4>Transaksi    => {{$datas->tanggaltransaksi}}</h4>
-     <h4>Bank         => {{$datas->bank_company}}</h4>
-     <h4>Jumlah Bayar => {{$datas->user_price}}</h4>
-      <h4>Status => @if($datas->status == '1') 
-      <span class="btn btn-primary">Berjalan</span>      
+      <table class="table cwite">
+  <tbody>
+    <tr>
+      <th scope="row" class="b">1</th>
+      <td class="b">Merk</td>
+      <td>{{$datas->merk}}</td>
+    </tr>
+    <tr>
+      <th scope="row" class="b">2</th>
+      <td  class="b">Transaksi</td>
+      <td>{{$datas->tanggaltransaksi}}</td>
+    </tr>
+    <tr>
+      <th scope="row" class="b">3</th>
+      <td class="b">Bank</td>
+      <td>{{$datas->bank_company}}</td>
+    </tr>
+    <tr>
+      <th scope="row" class="b">4</th>
+      <td  class="b">Jumlah Bayar</td>
+      <td>{{$datas->user_price}}</td>
+    </tr>
+    <tr>
+      <th scope="row" class="b">5</th>
+      <td  class="b">Status</td>
+      @if($datas->status == '1') 
+      <td><div class="alert alert-info" role="alert">Berjalan</div></td>
       @elseif($datas->status == '2')
-      <td class="btn btn-warning">Selesai</td>  
+      <td><div class="alert alert-danger">Selesai</div></td>  
       @else
       <td>error</td>
       @endif
-      </h4>
+      </t>
+    </tr>
+  </tbody>
+</table>
   </div>
 </div>
 </div>
+</center>
 </body>
 <style>
 .topp{
@@ -39,6 +68,12 @@
 .card{
     color:white;
  background-color:#28a745;
+}
+.cwite{
+  color:white !important;
+}
+.b{
+  font-weight: bold;
 }
 </style>
 </html>

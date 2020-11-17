@@ -12,13 +12,14 @@
 
 <body>
 
-    <div class="container" >
+    <div class="container">
         <div class="card">
             <center><div class="card-header">Daftar Transaksi</div></center>
             <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
                     <tr>
+                    <th scope="col">id</th>
                         <th scope="col">Email</th>
                         <th scope="col">Merk</th>
                         <th scope="col">Gambar</th>
@@ -35,6 +36,7 @@
                        
                 @foreach($data as $d)
                 <tr>
+                   
                     <td>{{$d->email}}</td>
                     <td>{{$d->merk}}</td>
                     <td><img src="http://192.168.43.237:8000/api/image/{{$d->gambar}}" alt="..." class="img-thumbnail"></td>
@@ -62,13 +64,13 @@
                         <input type="hidden" value="{{$d->bank_company}}" name="bank" />
                         <input type="hidden" value="{{$d->user_price}}" name="user" />
                         <input type="hidden" value="2" name="status" />
-                        <td><input type="submit" class="btn btn-warning" value="Stop" onClick="showActivity()"/></td>
+                        <td><input type="submit" class="btn btn-warning" value="Stop" /></td>
                     </form>
 
                     @elseif($d->opsistatus == 'hapus')
                     <form method="POST" action="http://192.168.43.237:8000/deletetrs/{{$d->id}}">
                          @csrf
-                        <td><button type="submit" class="btn btn-danger" onClick="showActivity()">Hapus</button></td>
+                        <td><button type="submit" class="btn btn-danger">Hapus</button></td>
                         @else
                         <td>error</td>
                     @endif
@@ -81,15 +83,7 @@
         </div>
   </div>
 </body>
-<script type="text/javascript">
-    function showActivity() {
-        Android.startNewActivity();
-    }
-</script>
 <style>
-    .container{
-        max-width:750px !important;
-    }
     .topp {
         margin-bottom: 50px !important;
     }

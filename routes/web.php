@@ -14,9 +14,8 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/booking','ApiController@viewbooking');
+
 Route::post('/a34d56','ApiController@adminOpsi');
 Route::post('/deletetrs/{id}','ApiController@adminDelete');
-// Route::get('/upload', 'UploadController@upload');
-// Route::post('/upload/proses', 'UploadController@proses_upload');
-
+Route::post('/adminloginpage','ApiController@pagelogin');
+Route::get('/booking/','ApiController@viewbooking');

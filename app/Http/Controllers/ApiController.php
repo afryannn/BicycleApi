@@ -16,6 +16,28 @@ use DB;
 
 class ApiController extends Controller
 { 
+    
+  public function pagelogin(Request $request){
+    $email = $request->email;
+    $password = $request->password;
+    $akun = DB::table('TBUser')->where('email', $request->email)->first();
+    if(!isset($akun)){
+      $arr = array("status" => 201, "message" => "email incorect");
+      return response()->json($arr);
+    }
+    $valPass = $akun->password;
+    if($valPass == $password){
+       if($akun->role_user =='2'){
+          $getdata = DB::table('TBUser')->where('id', $akun->id)->first();
+          $arr = array("status" => 200,"role" => "1","message" => "SUCCES", "data" => $getdata);
+          return view('home',["data"=>$getdata]);
+       }
+    }else{  
+      $arr = array("status" => 201, "message" => "password incorect");
+      return response()->json($arr);
+    } 
+
+  }
   public function adminDelete($id){
     $data = booking::where('id',$id)->first();
     $data->delete();
@@ -36,14 +58,73 @@ class ApiController extends Controller
     ]);
     return redirect("booking");
   }
-  public function viewbooking(){
-    $result = booking::all();
-    $cnt = $result->count();
-    return view('booking',["data" => $result,"count"=>$cnt]);
+  public function update_item(Request $request){
+    $id = $request->id;
+    $getkodesepeda = $request->kodesepeda;
+    $getmerk = $request->merk;
+    $getwarna = $request->warna;
+    $gethargasewa = $request->hargasewa;
+    $mg = $request->file('image')->getClientOriginalName();
+    $IsImage = DB::table('TBSepeda')->where('gambar', $mg)->first();
+    $TbImage = DB::table('TBSepeda')->where('id', $id)->first();
+    $OldImage = $TbImage->gambar;
+    $path = storage_path('images/'.$OldImage);
+    if(is_null($IsImage)){
+      File::delete($path);
+      $image = $request->file('image');
+      $name = time().'.'.$image->getClientOriginalExtension();
+      $destinationPath = storage_path('/images');
+      $image->move($destinationPath, $name);
+      $result = DB::table('TBSepeda')->where('id',$id)->update([
+      'kodesepeda' => $getkodesepeda,
+      'merk' => $getmerk,
+      'warna' => $getwarna,
+      'gambar' => $name,
+      'hargasewa' => $gethargasewa
+    ]);
+    $arr = array(
+      "status" => 200,  
+      "message" => "SUCCES",
+       "data" => '!Berhasil Update'
+      );
+    return response()->json($arr);
+    if(!isset($result)){
+      $result = array(
+        "status" => 403,
+        "message" => "FAILED",
+        "data" => "Terjadi kesalahan saat mengirim data"
+      );
+      return response()->json($result);
+    }
+     $result = array(
+       "status" => 200,
+       "message" => "SUCCES",
+       "data" => $result
+      );
+     return response()->json($result);
+    }else{
+      $result = DB::table('TBSepeda')->where('id',$id)->update([
+        'kodesepeda' => $getkodesepeda,
+        'merk' => $getmerk,
+        'warna' => $getwarna,
+        'gambar' => $mg,
+        'hargasewa' => $gethargasewa
+     ]);
+     $arr = array(
+       "status" => 200,
+       "message" => "SUCCES",
+       "data" => "Berhasil Update"
+      );
+     return response()->json($arr);
+    }
   }
-  public function viewbooking2(Request $req){
-    $email = $req->email;  
-    $getData = DB::table('TBTransaksi')->where('email', $email)->first();
+  public function viewbooking(){
+      $result = booking::all();
+      $cnt = $result->count();
+      return view('booking',["data" => $result,"count"=>$cnt]);
+  }
+  public function viewbooking2(Request $req,$id){ 
+    $getData = DB::table('TBTransaksi')->where('u_id',$id)->first();
     if(!isset($getData)){
       return view("bookingnotfound");
     }

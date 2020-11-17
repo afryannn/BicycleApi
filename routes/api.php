@@ -14,10 +14,15 @@ Route::get('/getcustomer','ApiController@getcustomer');
 Route::post('/deletecustomer','ApiController@deletecustomer');
 Route::get('/getitem','ApiController@getitem');
 Route::post('/postsepeda','ApiController@postsepeda');
+Route::post('/update-item','ApiController@update_item');
 Route::post('/deleteitem','ApiController@deleteitem');
 Route::get('/image/{filename}','ApiController@getimage');
 Route::post('/customerupdate','ApiController@customerupdate');
-Route::post('/bookingUser','ApiController@viewbooking2');
+Route::get('/bookingUser/{id}','ApiController@viewbooking2');
 Route::post('/user-booking','ApiController@userbooking2');
 Route::post('/image','ApiController@dummyimage');
+
+
+
+
 
